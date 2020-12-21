@@ -1,1 +1,41 @@
-<p>task-list works!</p>
+<div class="container-fluid aling-items-center pl-5 pr-5">
+    <p class="text-center font-weight-bold font-italic pt-2">List of Tasks</p>
+    <button type="button"  data-toggle="modal" data-target="#modalNewTask" 
+            class="btn btn-info justify-content-right m-1"> New task </button>
+    <ng-container *ngFor="let mock of mockTasks" class="p-1">
+        <app-task [task]="mock"></app-task>
+    </ng-container>
+</div>
+
+<div id="modalNewTask" class="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"> Nueva Task </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body d-flex aling-items-center justify-content-center">
+        <form id="newTask" [formGroup]="newTaskForm">
+            <p class="text-right">
+            <label for="status"> Estado: &nbsp;</label>
+            <input id="status" type="text" placeholder="  Estado" maxlength="11"
+                    formControlName="status" required>
+            </p>
+            <p class="text-right">
+            <label for="description"> Descripcion: &nbsp;</label>
+            <input id="description" type="text" placeholder=" Descripcion" formControlName="description"
+                    maxlength="256" required>
+            </p>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="newTask()" data-dismiss="modal">Guardar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+

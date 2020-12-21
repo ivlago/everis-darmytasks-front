@@ -1,1 +1,30 @@
-<p>task works!</p>
+<div class="card">
+    <div class="card-body">        
+        <div class="row pl-1 pr-1">
+            <div class="col-4">
+                <div class="row">
+                    Task id: {{ task.id }}
+                </div>
+                <div class="row">
+                    <div class="dropdown show">
+                        Tasks status
+                        <a class="btn dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ task.status }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" >Action</a>
+                            <a class="dropdown-item" href="#">Another action</a>
+                            <a class="dropdown-item" href="#">Something else here</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+            {{ task.description }}
+            </div>
+            <div class="col-1">
+            
+            </div>
+        </div>
+    </div>
+</div>
