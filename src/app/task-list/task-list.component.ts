@@ -10,7 +10,7 @@ import { Status } from '../task/models/status.model';
 })
 export class TaskListComponent implements OnInit {
   public newTaskForm: FormGroup;
-  public aaa: string;
+  public delete: boolean;
   public mockTasks: TaskModel[] = [
     {
       id: 1,
@@ -28,7 +28,7 @@ export class TaskListComponent implements OnInit {
       id: 3,
       title: 'TASK 3',
       status: Status.FINISH,
-      description: 'El América de Cali S. A. —en forma abreviada: América de Cali o portantes en Sudamérica'
+      description: 'Un texto es una composición de signos codificados en un sistema de escritura que forma una unidad de sentido. También es una composición de caracteres imprimibles generados por un algoritmo de cifrado que, aunque no tienen sentido para cualquier persona, sí puede ser descifrado por su destinatario original.'
     }
   ];
 
@@ -42,8 +42,16 @@ export class TaskListComponent implements OnInit {
   }
 
   public newTask() {
-    console.log('New Task');
-    console.log(this.newTaskForm.controls.status.value);
-    console.log(this.newTaskForm.controls.description.value);
+    const description: Status = this.newTaskForm.controls.description.value;
+    const newTask: TaskModel = {
+      id: 34151,
+      status: this.newTaskForm.controls.status.value,
+      description: description
+    }
+    this.mockTasks.push(newTask);
+  }
+
+  public deleteTask(id: number) {
+    this.mockTasks = this.mockTasks.filter(task => task.id !== id);
   }
 }

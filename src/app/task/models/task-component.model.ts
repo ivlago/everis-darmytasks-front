@@ -2,7 +2,7 @@ import { Status } from './status.model';
 
 export interface TaskModel {
     id?: number;
-    title: string;
+    title?: string;
     status: Status;
     description: string;
 }

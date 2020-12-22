@@ -1,10 +1,12 @@
-<div class="container-fluid aling-items-center pl-5 pr-5">
+<div class="container-fluid aling-items-center pl-5 pr-5 pb-2 scroll">
     <p class="text-center font-weight-bold font-italic pt-2">List of Tasks</p>
-    <button type="button"  data-toggle="modal" data-target="#modalNewTask" 
-            class="btn btn-info justify-content-right m-1"> New task </button>
-    <ng-container *ngFor="let mock of mockTasks" class="p-1">
-        <app-task [task]="mock"></app-task>
-    </ng-container>
+    <div class="pl-5 pr-5">
+      <button type="button"  data-toggle="modal" data-target="#modalNewTask" 
+              class="btn btn-info justify-content-right m-1"> New task </button>
+      <ng-container *ngFor="let mock of mockTasks" class="p-1">
+          <app-task [task]="mock" (delete)="deleteTask($event)"></app-task>
+      </ng-container>
+    </div>
 </div>
 
 <div id="modalNewTask" class="modal" tabindex="-1" role="dialog">
@@ -31,7 +33,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="newTask()" data-dismiss="modal">Guardar</button>
+        <button type="button" class="btn btn-primary" (click)="newTask()" data-dismiss="modal"
+                [disabled]="newTaskForm.invalid">Guardar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
