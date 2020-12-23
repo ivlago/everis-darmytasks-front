@@ -1,4 +1,4 @@
-<div class="card">
+<div class="card task">
     <div class="card-body">        
         <div class="row pl-1 pr-1">
             <div class="col-2">
@@ -6,29 +6,21 @@
                     Task id: {{ task.id }}
                 </div>
                 <div class="row">
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown button
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </div>
-                    <p>
-                        <select name="miselect" [(ngModel)]="select"> 
-                        <option [value]="item" *ngFor="let item of status">{{item}}</option>
-                        </select>
-                    </p>
+                    Status: {{ task.status }}
                 </div>
             </div>
             <div class="col-9">
             {{ task.description }}
             </div>
-            <div class="col-1 d-flex aling-items-center justify-conten-center">
-                <button (click)="deleteThisTask(task.id)" class="btn btn-light">
-                    <i class="fa fa-trash" aria-hidden="true"></i></button>
+            <div class="col-1 p-1">
+                <div class="row">
+                    <button (click)="deleteThisTask(task.id)" class="btn btn-light">
+                        <i class="fa fa-trash" aria-hidden="true"></i></button>
+                </div>
+                <div class="row">
+                    <button (click)="editThisTask(task.id)" class="btn btn-light">
+                        <i class="fas fa-pencil-alt"></i></button>
+                    </div>
             </div>
         </div>
     </div>

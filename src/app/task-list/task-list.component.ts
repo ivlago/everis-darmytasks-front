@@ -1,57 +1,100 @@
-import { Component, OnInit, NgModule } from '@angular/core';
+import { Component, OnInit, NgModule, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { TaskModel } from '../task/models/task-component.model';
 import { Status } from '../task/models/status.model';
+import { TaskControllerService } from '../services';
 
 @Component({
   selector: 'app-task-list',
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, OnDestroy {
   public newTaskForm: FormGroup;
-  public delete: boolean;
-  public mockTasks: TaskModel[] = [
-    {
-      id: 1,
-      title: 'TASK 1',
-      status: Status.PENDING,
-      description: 'description 1'
-    },
-    {
-      id: 2,
-      title: 'TASK 2',
-      status: Status.PROGRESS,
-      description: 'description 2'
-    },
-    {
-      id: 3,
-      title: 'TASK 3',
-      status: Status.FINISH,
-      description: 'Un texto es una composición de signos codificados en un sistema de escritura que forma una unidad de sentido. También es una composición de caracteres imprimibles generados por un algoritmo de cifrado que, aunque no tienen sentido para cualquier persona, sí puede ser descifrado por su destinatario original.'
-    }
-  ];
+  public editTaskForm: FormGroup;
+  public status: Status[] = [Status.PROGRESS, Status.PENDING, Status.FINISH];
+  public select: Status = Status.PENDING;
+  public update: boolean = false;
+  public taskList: any;
+  public id: number;
 
-  constructor() {}
+  private suscriptions = [];
+
+  constructor(private taskService: TaskControllerService) {}
 
   ngOnInit() {
+    this.getTasks();
+
     this.newTaskForm = new FormGroup({
-      status: new FormControl(''),
       description: new FormControl(''),
+    });
+
+    this.editTaskForm = new FormGroup({
+      updateDesc: new FormControl(''),
     });
   }
 
+  public getTasks() {
+    const taskSubs = this.taskService.findAllTask().subscribe(
+        value => {
+         console.log('task: ' + value);
+         this.taskList = value;
+        }, err => {
+          console.log(err);
+    });
+    this.suscriptions.push(taskSubs);
+  }
+
   public newTask() {
-    const description: Status = this.newTaskForm.controls.description.value;
+    const id = this.taskList[this.taskList.length - 1].id + 1;
     const newTask: TaskModel = {
-      id: 34151,
-      status: this.newTaskForm.controls.status.value,
-      description: description
-    }
-    this.mockTasks.push(newTask);
+      id: id,
+      title: 'Title' + id,
+      status: this.select,
+      description: this.newTaskForm.controls.description.value
+    };
+    // this.taskList.push(newTask);
+    this.taskService.saveTask(newTask).subscribe(
+      value => {
+        this.getTasks();
+      }
+    );
   }
 
   public deleteTask(id: number) {
-    this.mockTasks = this.mockTasks.filter(task => task.id !== id);
+    // this.taskList = this.taskList.filter(task => task.id !== id);
+    this.taskService.deleteTask(id).subscribe(
+      () => {
+        console.log('delete: ' );
+        this.getTasks();
+      }
+    );
+  }
+
+  public findTask(id: number) {
+    this.update = true;
+    this.id = id;
+  }
+
+  public editTask() {
+    const newTask: TaskModel = {
+      id: this.id,
+      title: 'Title' + this.id,
+      status: this.select,
+      description: this.editTaskForm.controls.updateDesc.value
+    };
+    this.taskService.updateTask(newTask, this.id).subscribe(
+      value => {
+        this.getTasks();
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.suscriptions.length > 0) {
+      this.suscriptions.forEach((subscription) => {
+        subscription.unsubscribe();
+      });
+    }
   }
 }

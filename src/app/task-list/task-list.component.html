@@ -1,10 +1,36 @@
-<div class="container-fluid aling-items-center pl-5 pr-5 pb-2 scroll">
-    <p class="text-center font-weight-bold font-italic pt-2">List of Tasks</p>
+<div class="container-fluid aling-items-center pl-5 pr-5 pb-2">
+    <div class="text-center font-weight-bold font-italic pt-2 pl-5">List of Tasks
+    <button type="button" data-toggle="modal" data-target="#modalNewTask" 
+              class="btn btn-info justify-content-right margin-button"> New task </button>
+    </div>
     <div class="pl-5 pr-5">
-      <button type="button"  data-toggle="modal" data-target="#modalNewTask" 
-              class="btn btn-info justify-content-right m-1"> New task </button>
-      <ng-container *ngFor="let mock of mockTasks" class="p-1">
-          <app-task [task]="mock" (delete)="deleteTask($event)"></app-task>
+      <ng-container *ngFor="let task of taskList" class="p-1">
+          <app-task class="p-3" [task]="task" (delete)="deleteTask($event)" (edit)="findTask($event)"></app-task>
+          <ng-container *ngIf="update && task.id === id">
+            <div class="card align-items-center p-2 w-50 margin">
+              <div class="row">
+                <p class="text-right">
+                <label for="status"> Estado: &nbsp;</label>
+                    <select name="miselect" [(ngModel)]="select"> 
+                      <option [value]="item" *ngFor="let item of status">{{item}}</option>
+                    </select>
+                </p>
+              </div>
+              <div class="row">
+                <form id="editTask" [formGroup]="editTaskForm">
+                    <p class="text-right">
+                    <label for="updateDesc"> Descripcion: &nbsp;</label>
+                    <input id="updateDesc" type="text" placeholder=" Descripcion" formControlName="updateDesc"
+                            maxlength="256" required>
+                    </p>
+                </form>
+              </div>
+              <div class="row">
+                <button type="button" class="btn btn-primary" (click)="editTask();update = false">Guardar</button>
+                <button type="button" class="btn btn-secondary" (click)="update = false">Cerrar</button>
+              </div>
+            </div>
+          </ng-container>
       </ng-container>
     </div>
 </div>
@@ -18,19 +44,24 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body d-flex aling-items-center justify-content-center">
-        <form id="newTask" [formGroup]="newTaskForm">
-            <p class="text-right">
-            <label for="status"> Estado: &nbsp;</label>
-            <input id="status" type="text" placeholder="  Estado" maxlength="11"
-                    formControlName="status" required>
-            </p>
+      <div class="modal-body grid aling-items-center justify-content-center">
+        <div class="row">
+          <p class="text-right">
+          <label for="status"> Estado: &nbsp;</label>
+            <select name="miselect" [(ngModel)]="select"> 
+              <option [value]="item" *ngFor="let item of status">{{item}}</option>
+            </select>
+          </p>
+        </div>
+        <div class="row">
+          <form id="newTask" [formGroup]="newTaskForm">
             <p class="text-right">
             <label for="description"> Descripcion: &nbsp;</label>
             <input id="description" type="text" placeholder=" Descripcion" formControlName="description"
                     maxlength="256" required>
             </p>
-        </form>
+          </form>
+        </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="newTask()" data-dismiss="modal"
@@ -40,5 +71,3 @@
     </div>
   </div>
 </div>
-
-

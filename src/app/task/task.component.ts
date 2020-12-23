@@ -10,8 +10,7 @@ import { Status } from './models/status.model';
 export class TaskComponent implements OnInit {
   @Input() task: TaskModel;
   @Output() delete = new EventEmitter<number>();
-  public status: Status[] = [Status.PROGRESS, Status.PENDING, Status.FINISH];
-  public select: Status;
+  @Output() edit = new EventEmitter<number>();
 
   constructor() { }
 
@@ -21,5 +20,9 @@ export class TaskComponent implements OnInit {
   public deleteThisTask(id: number) {
     const confirmDelete = confirm('¿Estas seguro?');
     confirmDelete ? this.delete.emit(id) : null;
+  }
+
+  public editThisTask(id: number) {
+    this.edit.emit(id);
   }
 }
