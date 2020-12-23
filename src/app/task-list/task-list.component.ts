@@ -17,6 +17,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   public update: boolean = false;
   public taskList: any;
   public id: number;
+  public task: TaskModel;
 
   private suscriptions = [];
 
@@ -45,14 +46,11 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   public newTask() {
-    const id = this.taskList[this.taskList.length - 1].id + 1;
     const newTask: TaskModel = {
-      id: id,
-      title: 'Title' + id,
+      title: 'Title',
       status: this.select,
       description: this.newTaskForm.controls.description.value
     };
-    // this.taskList.push(newTask);
     this.taskService.saveTask(newTask).subscribe(
       value => {
         this.getTasks();
@@ -61,10 +59,8 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   public deleteTask(id: number) {
-    // this.taskList = this.taskList.filter(task => task.id !== id);
     this.taskService.deleteTask(id).subscribe(
       () => {
-        console.log('delete: ' );
         this.getTasks();
       }
     );
@@ -73,14 +69,21 @@ export class TaskListComponent implements OnInit, OnDestroy {
   public findTask(id: number) {
     this.update = true;
     this.id = id;
+    this.taskService.findTaskById(this.id).subscribe(
+      value => {
+        this.task = value;
+        this.select = value.status;
+      }
+    );
   }
 
   public editTask() {
+    const updateDesc = this.editTaskForm.controls.updateDesc.value;
     const newTask: TaskModel = {
       id: this.id,
       title: 'Title' + this.id,
       status: this.select,
-      description: this.editTaskForm.controls.updateDesc.value
+      description: updateDesc !== '' ? updateDesc : this.task.description
     };
     this.taskService.updateTask(newTask, this.id).subscribe(
       value => {
