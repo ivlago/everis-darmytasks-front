@@ -24,12 +24,11 @@ jobs:
       run: |
         npm install
         npm run build --if-present
-        npm run test --if-present
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'everis-darmytask-front'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_923f83bea6914adca6e83b03744cfc8f }}
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_650cbd89df8b4d8ebfc7c232901e7d32 }}
         package: .
