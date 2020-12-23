@@ -37,7 +37,6 @@ export class TaskListComponent implements OnInit, OnDestroy {
   public getTasks() {
     const taskSubs = this.taskService.findAllTask().subscribe(
         value => {
-         console.log('task: ' + value);
          this.taskList = value;
         }, err => {
           console.log(err);
